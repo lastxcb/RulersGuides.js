@@ -1,46 +1,46 @@
 /**
-* This Javascript package creates Photoshop-like guides and rulers interface on a web page.
-* Guides are created by click-and-dragging corresponding horizontal or vertical ruler.
-* Guide positions could be saved in a local storage and opened later (on a page location basis)
-* It is possible to open/save created guides as grids
-* (Note: grids will be saved on a page location basis, so it's not possible to use the same grids in another browser window/tab).
-* Rulers can be unlocked, so that one of the rulers will scroll along the page and the other will be always visible.
-* Guides can be snapped to defined number of pixels.
-* Detailed info mode is available, which shows position and size of regions created by the guides.
-* Guides can be snapped to DOM elements (experimental)
-*
-* Following hotkeys are available:
-*
-* Toggle rulers - Ctrl+Alt+R
-* Toggle guides - Ctrl+Alt+G
-* Toggle rulers and guides - Ctrl+Alt+A
-* Clear all guides - Ctrl+Alt+D
-* Save grid dialog - Ctrl+Alt+S
-* Open grid dialog - Ctrl+Alt+P
-* Lock/unlock rulers - Ctrl+Alt+L
-* Open Snap to dialog - Ctrl+Alt+C
-* Toggle detailed info - Ctrl+Alt+I
-* Snap to DOM elements - Ctrl+Alt+E
-*
-* Look-and-feel can be adjusted using CSS.
-*
-* RulersGuides.js is available as a bookmarklet, please see bookmarklet.js file
-* provided with the package
-*
-* RulersGuides.js requires Event.js and Dragdrop.js packages, which can be acquired at the following links:
-*
-* Event.js
-*
-* Github - https://github.com/mark-rolich/Event.js
-* JS Classes - http://www.jsclasses.org/package/212-JavaScript-Handle-events-in-a-browser-independent-manner.html
-*
-* Dragdrop.js
-*
-* Github - https://github.com/mark-rolich/Dragdrop.js
-* JS Classes - http://www.jsclasses.org/package/215-JavaScript-Handle-drag-and-drop-events-of-page-elements.html
-*
-* @author Mark Rolich <mark.rolich@gmail.com>
-*/
+ * This Javascript package creates Photoshop-like guides and rulers interface on a web page.
+ * Guides are created by click-and-dragging corresponding horizontal or vertical ruler.
+ * Guide positions could be saved in a local storage and opened later (on a page location basis)
+ * It is possible to open/save created guides as grids
+ * (Note: grids will be saved on a page location basis, so it's not possible to use the same grids in another browser window/tab).
+ * Rulers can be unlocked, so that one of the rulers will scroll along the page and the other will be always visible.
+ * Guides can be snapped to defined number of pixels.
+ * Detailed info mode is available, which shows position and size of regions created by the guides.
+ * Guides can be snapped to DOM elements (experimental)
+ *
+ * Following hotkeys are available:
+ *
+ * Toggle rulers - Ctrl+Alt+R
+ * Toggle guides - Ctrl+Alt+G
+ * Toggle rulers and guides - Ctrl+Alt+A
+ * Clear all guides - Ctrl+Alt+D
+ * Save grid dialog - Ctrl+Alt+S
+ * Open grid dialog - Ctrl+Alt+P
+ * Lock/unlock rulers - Ctrl+Alt+L
+ * Open Snap to dialog - Ctrl+Alt+C
+ * Toggle detailed info - Ctrl+Alt+I
+ * Snap to DOM elements - Ctrl+Alt+E
+ *
+ * Look-and-feel can be adjusted using CSS.
+ *
+ * RulersGuides.js is available as a bookmarklet, please see bookmarklet.js file
+ * provided with the package
+ *
+ * RulersGuides.js requires Event.js and Dragdrop.js packages, which can be acquired at the following links:
+ *
+ * Event.js
+ *
+ * Github - https://github.com/mark-rolich/Event.js
+ * JS Classes - http://www.jsclasses.org/package/212-JavaScript-Handle-events-in-a-browser-independent-manner.html
+ *
+ * Dragdrop.js
+ *
+ * Github - https://github.com/mark-rolich/Dragdrop.js
+ * JS Classes - http://www.jsclasses.org/package/215-JavaScript-Handle-drag-and-drop-events-of-page-elements.html
+ *
+ * @author Mark Rolich <mark.rolich@gmail.com>
+ */
 var RulersGuides = function (evt, dragdrop) {
     'use strict';
 
@@ -75,6 +75,7 @@ var RulersGuides = function (evt, dragdrop) {
         resizeTimer = null,
         snapDom     = 0,
         cssText     = 'html,body{margin:0;padding:0}.rg-overlay{position:absolute;top:0;left:0;overflow:hidden}.guide{position:absolute;top:0;left:0;z-index:9991;font-size:0}.guide.v{width:1px;height:7000px;border-right:solid 1px #00f;cursor:col-resize}.guide.h{width:3000px;height:1px;border-bottom:solid 1px #00f;cursor:row-resize}.info{width:50px;height:25px;line-height:25px;text-align:center;position:relative;font-size:13px;background-color:#eee;border:solid 1px #ccc;color:#000}.guide.v .info{left:2px}.guide.h .info{top:2px}.unselectable{-moz-user-select:-moz-none;-khtml-user-select:none;-webkit-user-select:none;-ms-user-select:none;user-select:none}.ruler{background-color:#ccc;position:absolute;top:0;left:0;z-index:9990}.ruler .label{font:12px Arial;color:#000}.ruler,.ruler span{font-size:0}.ruler.h{width:3000px;left:-1px;padding-top:14px;border-bottom:solid 1px #000}.ruler.v{height:7000px;top:-1px;padding-left:16px;width:25px;border-right:solid 1px #000}.ruler.h span{border-left:solid 1px #999;height:9px;width:1px;vertical-align:bottom;display:inline-block;*display:inline;zoom:1}.ruler.v span{display:block;margin-left:auto;margin-right:0;border-top:solid 1px #999;width:9px;height:1px}.ruler.v span.major{border-top:solid 1px #000;width:13px}.ruler.v span.milestone{position:relative;border-top:solid 1px #000;width:17px}.ruler.v span.label{border:0;font-size:9px;position:absolute;text-align:center;width:9px}.ruler.h span.major{border-left:solid 1px #000;height:13px}.ruler.h span.milestone{position:relative;border-left:solid 1px #000;height:17px}.ruler.h span.label{border:0;font-size:9px;position:absolute;text-align:center;top:-14px;width:9px}.ruler.h .l10{left:-5px}.ruler.h .l100{left:-7px}.ruler.h .l1000{left:-10px}.ruler.v .l10,.ruler.v .l100,.ruler.v .l1000{top:-7px}.ruler.v .l10{left:-12px}.ruler.v .l100{left:-17px}.ruler.v .l1000{left:-23px}.menu-btn{position:fixed;left:3px;top:2px;line-height:9px;z-index:9998;width:20px;height:20px;background-color:red;opacity:.5;font-size:20px;text-align:left;color:#fff;font-weight:700;cursor:pointer;border-radius:2px}.rg-menu{position:fixed;top:22px;left:3px;padding:0;margin:0;list-style:0;display:none;font:13px Arial;z-index:9999;box-shadow:2px 2px 10px #ccc}.rg-menu li{text-align:left;border-bottom:solid 1px #999;padding:0}.rg-menu a{background-color:#777;display:block;padding:5px;text-decoration:none;color:#fff;line-height:18px}.rg-menu a:hover,.rg-menu a.selected{color:#fff;background-color:#3b94ec}.rg-menu a.disabled{color:#ccc}.rg-menu .desc{display:inline-block;width:170px}.dialog{position:fixed;background-color:#777;z-index:9999;color:#fff;font-size:13px;display:none;box-shadow:2px 2px 10px #ccc}.dialog button{border:0;color:#333;cursor:pointer;background-color:#eaeaea;background-image:linear-gradient(#fafafa,#eaeaea);background-repeat:repeat-x;border-radius:3px;text-shadow:0 1px 0 rgba(255,255,255,.9)}.dialog input,.dialog select,.dialog button{font-size:13px;margin:3px;padding:3px}.dialog .title-bar{padding:5px;background-color:#aaa;font-weight:700}.dialog .wrapper{padding:10px}.open-dialog select,.open-dialog button{float:left;display:block}.open-dialog .ok-btn,.open-dialog .cancel-btn{margin:10px 3px}.open-dialog .ok-btn{clear:both}.snap-dialog label{font-weight:700;padding:3px}.snap-dialog .ok-btn{margin-left:18px}.snap-dialog .ok-btn,.snap-dialog .cancel-btn{margin-top:10px}.snap-dialog .rg-y-label{margin-left:10px}#rg-x-snap,#rg-y-snap{width:50px}.info-block-wrapper{position:absolute;z-index:9989}.info-block{position:absolute;text-align:left}.info-block.even{background:0 0;background-color:rgba(0,0,255,.2);-ms-filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#330000FF, endColorstr=#330000FF);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#330000FF, endColorstr=#330000FF);zoom:1}.info-block.odd{background:0 0;background-color:rgba(255,0,0,.2);-ms-filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#33FF0000, endColorstr=#33FF0000);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#33FF0000, endColorstr=#33FF0000);zoom:1}.info-block-txt{padding:5px;display:inline-block;vertical-align:top;background-color:#777;color:#fff;font-size:13px;*display:inline;zoom:1}',
+        //生成尺子，由无数span组成
         Ruler       = function (type, size) {
             var ruler       = document.createElement('div'),
                 i           = 0,
@@ -124,13 +125,14 @@ var RulersGuides = function (evt, dragdrop) {
 
             return ruler;
         },
+        //获取窗口大小
         getWindowSize = function () {
             var w = Math.max(
-                    body.scrollWidth,
-                    body.offsetWidth,
-                    doc.clientWidth,
-                    doc.scrollWidth,
-                    doc.offsetWidth
+                body.scrollWidth,
+                body.offsetWidth,
+                doc.clientWidth,
+                doc.scrollWidth,
+                doc.offsetWidth
                 ),
                 h = Math.max(
                     body.scrollHeight,
@@ -142,18 +144,21 @@ var RulersGuides = function (evt, dragdrop) {
 
             return [w, h];
         },
+        //获取滚轮位置
         getScrollPos = function () {
             var t = Math.max(doc.scrollTop, body.scrollTop),
                 l = Math.max(doc.scrollLeft, body.scrollLeft);
 
             return [t, l];
         },
+        //获取滚轮大小
         getScrollSize = function () {
             var w = Math.max(doc.scrollWidth, body.scrollWidth),
                 h = Math.max(doc.scrollHeight, body.scrollHeight);
 
             return [w, h];
         },
+        //关闭对话框
         closeAllDialogs = function () {
             var i = 0;
 
@@ -161,6 +166,7 @@ var RulersGuides = function (evt, dragdrop) {
                 dialogs[i].close();
             }
         },
+        //删除一条辅助线
         removeInboundGuide = function (guide, gUid) {
             var scrollPos = getScrollPos();
 
@@ -175,6 +181,7 @@ var RulersGuides = function (evt, dragdrop) {
                 guidesCnt = guidesCnt - 1;
             }
         },
+        //删除所有辅助线
         removeInboundGuides = function () {
             var i;
 
@@ -184,6 +191,7 @@ var RulersGuides = function (evt, dragdrop) {
                 }
             }
         },
+        // 隐藏/显示辅助线
         toggleGuides = function () {
             var i;
 
@@ -201,6 +209,7 @@ var RulersGuides = function (evt, dragdrop) {
                 wrapper.style.display = 'block';
             }
         },
+        //隐藏/显示尺子
         toggleRulers = function () {
             rulerStatus = 1 - rulerStatus;
 
@@ -214,6 +223,7 @@ var RulersGuides = function (evt, dragdrop) {
                 hRuler.style.display = 'none';
             }
         },
+        //删除已保存页面(当前页面存入localStorage)
         removeGrid = function (gridName) {
             if (gridList[gridName] !== undefined) {
                 delete gridList[gridName];
@@ -236,6 +246,7 @@ var RulersGuides = function (evt, dragdrop) {
                 gInfoBlockWrapper.style.display = 'none';
             }
         },
+        //生成grid
         renderGrid = function (gridName) {
             if (gridList[gridName] !== undefined) {
                 var grid        = gridList[gridName],
@@ -438,6 +449,7 @@ var RulersGuides = function (evt, dragdrop) {
                 }
             }
         },
+        //显示每个分块的长宽等信息，没什么用
         showDetailedInfo = function () {
             var i,
                 j = 0,
@@ -533,6 +545,7 @@ var RulersGuides = function (evt, dragdrop) {
                 gInfoBlockWrapper.style.display = 'none';
             }
         },
+        //计算尺寸
         calculateDomDimensions = function () {
             var x = [],
                 y = [],
@@ -898,6 +911,7 @@ var RulersGuides = function (evt, dragdrop) {
                 dialog.style.display = 'none';
             };
         },
+        //核心开始，生成尺子，对话框，菜单等信息，然后展示
         prepare     = function () {
             var style = document.createElement('style'),
                 size = getWindowSize(),
@@ -987,6 +1001,7 @@ var RulersGuides = function (evt, dragdrop) {
             scrollPos       = getScrollPos(),
             snap            = 0;
 
+        //点击其他地方，菜单关闭
         if (src.className.indexOf('menu-btn') === -1) {
             menu.close();
         }
@@ -996,6 +1011,7 @@ var RulersGuides = function (evt, dragdrop) {
             hBound = hRuler.offsetHeight;
         }
 
+        //点击尺子，生成一条线
         if (
             (
                 (x > vBound && y < hBound) ||
@@ -1039,21 +1055,28 @@ var RulersGuides = function (evt, dragdrop) {
 
             wrapper.appendChild(guide);
 
+            //最最核心，生成一个可拖动的线
+
+
+            // 拖动主要使用了 drag元素的onStart,onMove和onStop事件
+
             dragdrop.set(guide, {
                 mode: mode,
                 onstart: function (elem) {
                     var text = (elem.mode === 1)
-                            ? parseInt(elem.style.left, 10) + 2
-                            : parseInt(elem.style.top, 10) + 2;
+                        ? parseInt(elem.style.left, 10) + 2
+                        : parseInt(elem.style.top, 10) + 2;
 
                     elem.text.nodeValue = text + 'px';
 
+                    //拖动开始时不显示额外信息
                     if (elem.over !== undefined) {
                         evt.detach('mouseover', elem, elem.over);
                         evt.detach('mouseout', elem, elem.out);
                     }
                 },
                 onmove: function (elem) {
+
                     var text    = '',
                         pos     = 0,
                         dims    = [],
@@ -1063,6 +1086,7 @@ var RulersGuides = function (evt, dragdrop) {
                     pos = (elem.mode === 1) ? elem.style.left : elem.style.top;
                     pos = parseInt(pos, 10);
 
+                    //snap关键地方，就是不停在move的过程中修正位置
                     if (snapDom === 1) {
                         dims = domDimensions[elem.mode - 1];
 
@@ -1087,6 +1111,7 @@ var RulersGuides = function (evt, dragdrop) {
                     elem.text.nodeValue = text;
                 },
                 onstop: function (elem) {
+                    //显示额外信息
                     elem.over = evt.attach('mouseover', elem, function (e, src) {
                         if (src.className === 'guide v draggable') {
                             elem.info.style.top = ((e.clientY + scrollPos[0]) - 35) + 'px';
@@ -1121,54 +1146,56 @@ var RulersGuides = function (evt, dragdrop) {
     evt.attach('keyup', document, function (e) {
         if (e.ctrlKey === true && e.altKey === true) {
             switch (e.keyCode) {
-            case 83:
-                saveGrid();
-                break;
-            case 82:
-                toggleRulers();
-                break;
-            case 79:
-                openGridDialog.open();
-                break;
-            case 76:
-                toggleRulersLock();
-                break;
-            case 73:
-                detailsStatus = 1 - detailsStatus;
-                showDetailedInfo();
-                break;
-            case 71:
-                toggleGuides();
-                break;
-            case 69:
-                snapDom = 1 - snapDom;
+                case 83:
+                    saveGrid();
+                    break;
+                case 82:
+                    toggleRulers();
+                    break;
+                case 79:
+                    openGridDialog.open();
+                    break;
+                case 76:
+                    toggleRulersLock();
+                    break;
+                case 73:
+                    detailsStatus = 1 - detailsStatus;
+                    showDetailedInfo();
+                    break;
+                case 71:
+                    toggleGuides();
+                    break;
+                case 69:
+                    snapDom = 1 - snapDom;
 
-                if (snapDom === 1) {
-                    domDimensions = calculateDomDimensions();
-                }
-                break;
-            case 68:
-                deleteGuides();
-                break;
-            case 67:
-                snapDialog.open();
-                break;
-            case 65:
-                if (rulerStatus === 1 || guideStatus === 1) {
-                    rulerStatus = guideStatus = 1;
-                    wrapper.style.display = 'none';
-                } else {
-                    rulerStatus = guideStatus = 0;
-                    wrapper.style.display = 'block';
-                }
+                    if (snapDom === 1) {
+                        domDimensions = calculateDomDimensions();
+                    }
+                    break;
+                case 68:
+                    deleteGuides();
+                    break;
+                case 67:
+                    snapDialog.open();
+                    break;
+                case 65:
+                    if (rulerStatus === 1 || guideStatus === 1) {
+                        rulerStatus = guideStatus = 1;
+                        wrapper.style.display = 'none';
+                    } else {
+                        rulerStatus = guideStatus = 0;
+                        wrapper.style.display = 'block';
+                    }
 
-                toggleRulers();
-                toggleGuides();
+                    toggleRulers();
+                    toggleGuides();
 
-                break;
+                    break;
             }
         }
     });
+
+    //改变窗口大小后，重新计算刻度
 
     evt.attach('resize', window, function () {
         var size = getWindowSize();
